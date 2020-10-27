@@ -1,4 +1,4 @@
-package com.sunnyweather.sunnyweather
+package com.sunnyweather.android
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
