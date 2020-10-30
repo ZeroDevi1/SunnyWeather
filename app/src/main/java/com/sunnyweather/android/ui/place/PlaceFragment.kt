@@ -1,5 +1,6 @@
 package com.sunnyweather.android.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sunnyweather.android.MainActivity
 import com.sunnyweather.android.R
+import com.sunnyweather.android.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.fragment_place.*
 
 /**
@@ -43,8 +46,26 @@ class PlaceFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_place, container, false)
     }
 
+    /**
+     * 如果已经存储了城市数据,那么直接获取已存储的数据并解析成 Place 对象,
+     * 然后使用它的经纬度坐标和城市名直接跳转并传递给 WeatherActivity,这样用户就不需要每次都重新搜索并选择城市了
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        /**
+         * 只有当 PlaceFragment 被嵌入 MainActivity,并且之前已经存在选择的城市,才会直接跳转到 WeatherActivity
+         */
+        if (activity is MainActivity && viewModel.isPlaceSaved()) {
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("location_lng", place.location.lng)
+                putExtra("location_lat", place.location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         adapter = PlaceAdapter(this, viewModel.placeList)
