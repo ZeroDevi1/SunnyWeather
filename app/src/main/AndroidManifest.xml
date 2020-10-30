@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+        android:icon="@mipmap/ic_launcher" : 专门用于指定应用程序图标的,这里指定成 @mipmap/ic_launcher
+        那么 Android 8.0 及以上,使用 mipmap-anydpi-v26 目录下的 ic_launcher.xml
+        Android 7.0 以下使用 mipmap 相应分辨率目录下的 ic_launcher.png 图片作为应用图标
+
+         android:roundIcon="@mipmap/ic_launcher_round" : 只适用于 Android 7.1 的过渡版本
+    -->
     <application
         android:name=".SunnyWeatherApplication"
         android:allowBackup="true"
