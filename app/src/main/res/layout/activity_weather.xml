@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--
+        在 ScrollView 外面嵌套一层 SwipeRefreshLayout,这样 ScrollView 就自动拥有了下拉刷新功能了
+    -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--
+            使用 ScrollView 允许通过滚动的方式查看屏幕外的内容
+            因为 ScrollView 内部只允许存在一个直接子布局,所以嵌套一个垂直方向的 LinearLayout,然后再逐个引入定义的布局
+            一开始 ScrollView 是隐藏的,不然空数据看上去很奇怪,等到天气数据请求成功之后,通过代码的方式再将 ScrollView 显示出来
+        -->
+        <ScrollView
+            android:id="@+id/weatherLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/now" />
+
+                <include layout="@layout/forecast" />
+
+                <include layout="@layout/life_index" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!--
+        DrawerLayout 的第一个子控件用于显示主屏幕中的内容,第二个子控件用于显示滑动菜单中的内容
+        所以在第二个子控件的位置添加了用于搜索全球城市数据的 Fragment
+        为了让 Fragment 中的搜索框不和系统状态栏重合,使用外层包裹布局的方式向下偏移了一段距离
+    -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:focusable="true">
+
+        <fragment
+            android:id="@+id/placeFragment"
+            android:name="com.sunnyweather.android.ui.place.PlaceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp" />
+    </FrameLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
